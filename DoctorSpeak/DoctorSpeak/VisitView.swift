@@ -20,21 +20,19 @@ struct VisitView: View {
     var body: some View {
         VStack(spacing: 0) {
             if recorder.isRecording {
-                recordingView
-            } else {
-                if hasSummary {
-                    tabBar
-                    if selectedTab == .summary {
-                        summaryArea
-                    } else {
-                        transcriptArea
-                    }
+                liveRecordingArea
+            } else if hasSummary {
+                tabBar
+                if selectedTab == .summary {
+                    summaryArea
                 } else {
                     transcriptArea
                 }
-                Divider()
-                controlArea
+            } else {
+                transcriptArea
             }
+            Divider()
+            controlArea
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(red: 0.96, green: 0.98, blue: 1.0).ignoresSafeArea())
@@ -99,6 +97,31 @@ struct VisitView: View {
         }
     }
 
+    // MARK: - Live recording
+
+    /// While recording, the words being transcribed appear centered on screen,
+    /// scrolling to keep the latest text visible as it grows.
+    private var liveRecordingArea: some View {
+        GeometryReader { geo in
+            ScrollViewReader { proxy in
+                ScrollView {
+                    Text(recorder.partialTranscript.isEmpty ? "Listening…" : recorder.partialTranscript)
+                        .font(.system(size: 22, weight: .medium))
+                        .foregroundStyle(recorder.partialTranscript.isEmpty
+                            ? Color(red: 0.1, green: 0.15, blue: 0.2).opacity(0.4)
+                            : Color(red: 0.1, green: 0.15, blue: 0.2))
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, minHeight: geo.size.height, alignment: .center)
+                        .padding(.horizontal, 28)
+                        .id("live")
+                }
+                .onChange(of: recorder.partialTranscript) { _, _ in
+                    withAnimation { proxy.scrollTo("live", anchor: .bottom) }
+                }
+            }
+        }
+    }
+
     // MARK: - Transcript display
 
     @ViewBuilder
@@ -135,57 +158,6 @@ struct VisitView: View {
         }
     }
 
-    // MARK: - Recording
-
-    /// While recording, a large centered Stop button with the live transcript
-    /// scrolling by underneath it.
-    private var recordingView: some View {
-        VStack(spacing: 28) {
-            Spacer()
-
-            Button(action: stopRecording) {
-                VStack(spacing: 14) {
-                    Image(systemName: "stop.circle.fill")
-                        .font(.system(size: 96))
-                        .foregroundStyle(.red)
-                        .symbolEffect(.pulse, isActive: true)
-                    Text("Stop Recording")
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2))
-                }
-            }
-
-            ScrollViewReader { proxy in
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 8) {
-                        if !appointment.visit_transcript.isEmpty {
-                            Text(appointment.visit_transcript)
-                                .font(.system(size: 16))
-                                .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2).opacity(0.5))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        if !recorder.partialTranscript.isEmpty {
-                            Text(recorder.partialTranscript)
-                                .font(.system(size: 16))
-                                .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        Color.clear.frame(height: 1).id("bottom")
-                    }
-                    .padding(.horizontal, 20)
-                }
-                .onChange(of: recorder.partialTranscript) { _, _ in
-                    withAnimation { proxy.scrollTo("bottom", anchor: .bottom) }
-                }
-            }
-            .frame(maxHeight: 240)
-
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
-    }
-
     // MARK: - Controls
 
     @ViewBuilder
@@ -200,14 +172,20 @@ struct VisitView: View {
                 }
                 .padding(.vertical, 18)
             } else {
-                Button(action: startRecording) {
-                    controlLabel(
-                        icon: "microphone.circle.fill",
-                        title: hasTranscript ? "Continue Recording Visit" : "Record Visit",
-                        color: Color(red: 0.11, green: 0.49, blue: 0.78),
-                        pulse: false
-                    )
+                Button(action: recorder.isRecording ? stopRecording : startRecording) {
+                    VStack(spacing: 10) {
+                        Image(systemName: recorder.isRecording ? "stop.circle.fill" : "mic.circle.fill")
+                            .font(.system(size: 64))
+                            .foregroundStyle(recorder.isRecording ? .red : Color(red: 0.11, green: 0.49, blue: 0.78))
+                            .symbolEffect(.pulse, isActive: recorder.isRecording)
+                        Text(recorder.isRecording
+                            ? "Tap to stop recording"
+                            : (hasTranscript ? "Tap to continue recording" : "Tap to record visit"))
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2))
+                    }
                 }
+                .padding(.vertical, 16)
             }
             if let message = recorder.errorMessage ?? errorMessage {
                 Text(message)
@@ -223,22 +201,11 @@ struct VisitView: View {
         .background(.white)
     }
 
-    private func controlLabel(icon: String, title: String, color: Color, pulse: Bool) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 36))
-                .foregroundStyle(color)
-                .symbolEffect(.pulse, isActive: pulse)
-            Text(title)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2))
-        }
-        .padding(.vertical, 12)
-    }
-
     // MARK: - Actions
 
     private func startRecording() {
+        // Show the live transcript (not the summary) while recording.
+        selectedTab = .transcript
         // Snapshot whatever is already saved so the new session appends to it.
         baseTranscript = appointment.visit_transcript
         Task {

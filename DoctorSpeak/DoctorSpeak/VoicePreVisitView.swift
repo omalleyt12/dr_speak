@@ -13,6 +13,9 @@ struct VoicePreVisitView: View {
     @State private var errorMessage: String?
     /// The assistant bubble currently being streamed (built up from deltas).
     @State private var streamingMessage: ChatMessage?
+    /// How many times the patient has replied; used to refresh the title after
+    /// the first few responses.
+    @State private var userResponseCount = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -68,16 +71,13 @@ struct VoicePreVisitView: View {
         .background(Color(red: 0.96, green: 0.98, blue: 1.0))
         .navigationTitle(appointment.appointment_title.isEmpty ? "New Appointment" : appointment.appointment_title)
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear {
-            stopAgent()
-            generateTitleIfNeeded()
-        }
+        .onDisappear { stopAgent() }
     }
 
-    /// When leaving pre-visit, if the appointment still has no title, ask Grok
-    /// to name it from the conversation in the background.
-    private func generateTitleIfNeeded() {
-        guard appointment.appointment_title.isEmpty else { return }
+    /// Asks Grok to (re)name the appointment from the conversation so far, in the
+    /// background. Called after each of the patient's first few replies so the
+    /// title sharpens as more detail comes in.
+    private func updateTitle() {
         let messages = appointment.previsit_messages
         guard !messages.isEmpty else { return }
         let appointment = self.appointment
@@ -101,10 +101,16 @@ struct VoicePreVisitView: View {
 
     private func startAgent() {
         errorMessage = nil
+        userResponseCount = 0
         let agent = GrokVoiceAgent(instructions: createPrevisitVoicePrompt(profile: profiles.first))
 
         agent.onUserTranscript = { transcript in
             appointment.previsit_messages.append(ChatMessage(text: transcript, isUser: true))
+            // Refresh the title after the patient's first three replies.
+            userResponseCount += 1
+            if userResponseCount <= 3 {
+                updateTitle()
+            }
         }
         agent.onAssistantResponseStarted = {
             let message = ChatMessage(text: "", isUser: false)

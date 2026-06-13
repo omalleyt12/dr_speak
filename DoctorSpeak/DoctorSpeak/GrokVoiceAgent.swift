@@ -99,15 +99,12 @@ class GrokVoiceAgent {
         isConnected = true
         startReceiving(on: task)
         // Apply the session instructions and wait for them to be sent *before*
-        // kicking off the first response, so the agent already knows it should
-        // begin the conversation (greet / read the summary) when it speaks.
+        // kicking off the first response, so the agent already has its system
+        // prompt when it speaks. Note: `response.create` must NOT carry its own
+        // `instructions` — doing so overrides the session prompt for that
+        // response, so the agent would lose the previsit/postvisit prompt.
         try await configureSession()
-        await sendAndWait([
-            "type": "response.create",
-            "response": [
-                "instructions": "Begin the conversation now, following your system instructions."
-            ]
-        ])
+        await sendAndWait(["type": "response.create"])
     }
 
     private func configureSession() async throws {

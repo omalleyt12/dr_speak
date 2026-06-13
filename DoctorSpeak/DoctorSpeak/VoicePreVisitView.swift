@@ -68,7 +68,27 @@ struct VoicePreVisitView: View {
         .background(Color(red: 0.96, green: 0.98, blue: 1.0))
         .navigationTitle(appointment.appointment_title.isEmpty ? "New Appointment" : appointment.appointment_title)
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear { stopAgent() }
+        .onDisappear {
+            stopAgent()
+            generateTitleIfNeeded()
+        }
+    }
+
+    /// When leaving pre-visit, if the appointment still has no title, ask Grok
+    /// to name it from the conversation in the background.
+    private func generateTitleIfNeeded() {
+        guard appointment.appointment_title.isEmpty else { return }
+        let messages = appointment.previsit_messages
+        guard !messages.isEmpty else { return }
+        let appointment = self.appointment
+        Task {
+            if let title = try? await GrokService.generateTitle(messages: messages) {
+                let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    appointment.appointment_title = trimmed
+                }
+            }
+        }
     }
 
     private func toggle() {

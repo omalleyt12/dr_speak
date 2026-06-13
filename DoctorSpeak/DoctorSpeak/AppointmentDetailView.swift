@@ -12,7 +12,7 @@ struct AppointmentDetailView: View {
             NavigationLink(destination: VisitView(appointment: appointment)) {
                 AppointmentPhaseButton(title: "Visit", icon: "stethoscope", color: Color(red: 0.05, green: 0.67, blue: 0.72))
             }
-            NavigationLink(destination: PostVisitView(appointment: appointment)) {
+            NavigationLink(destination: VoicePostVisitView(appointment: appointment)) {
                 AppointmentPhaseButton(title: "Post-visit", icon: "checkmark.circle.fill", color: Color(red: 0.2, green: 0.6, blue: 0.4))
             }
             Spacer()

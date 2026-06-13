@@ -26,6 +26,7 @@
 		B001000100000017 /* GrokVoiceAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000018 /* GrokVoiceAgent.swift */; };
 		B001000100000018 /* VoicePreVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000019 /* VoicePreVisitView.swift */; };
 		B00100010000001A /* VoicePostVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00100020000001A /* VoicePostVisitView.swift */; };
+		B00100010000001B /* UpcomingAppointmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00100020000001B /* UpcomingAppointmentsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		B001000200000018 /* GrokVoiceAgent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrokVoiceAgent.swift; sourceTree = "<group>"; };
 		B001000200000019 /* VoicePreVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreVisitView.swift; sourceTree = "<group>"; };
 		B00100020000001A /* VoicePostVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePostVisitView.swift; sourceTree = "<group>"; };
+		B00100020000001B /* UpcomingAppointmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpcomingAppointmentsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				B001000200000018 /* GrokVoiceAgent.swift */,
 				B001000200000019 /* VoicePreVisitView.swift */,
 				B00100020000001A /* VoicePostVisitView.swift */,
+				B00100020000001B /* UpcomingAppointmentsView.swift */,
 				B001000200000003 /* Assets.xcassets */,
 				B001000400000003 /* Preview Content */,
 			);
@@ -199,6 +202,7 @@
 				B001000100000017 /* GrokVoiceAgent.swift in Sources */,
 				B001000100000018 /* VoicePreVisitView.swift in Sources */,
 				B00100010000001A /* VoicePostVisitView.swift in Sources */,
+				B00100010000001B /* UpcomingAppointmentsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +342,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Doctor Speak needs microphone access to record your visit.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Doctor Speak uses speech recognition to show a live transcript while you record your visit.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -369,6 +374,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Doctor Speak needs microphone access to record your visit.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Doctor Speak uses speech recognition to show a live transcript while you record your visit.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

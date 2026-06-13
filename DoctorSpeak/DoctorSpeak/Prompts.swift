@@ -29,6 +29,19 @@ For every following message, answer the patient's questions and concerns using t
 If something was not covered during the visit, say so plainly and suggest they follow up with their doctor.
 """
 
+let TITLE_PROMPT = """
+You are a medical assistant. Based on the following intake conversation between a patient and an assistant, \
+write a short title for the appointment describing the reason and doctor type, for example 'Cardiology - Chest Pain'. \
+Keep it under about six words. Return only the title text, with no quotes, preamble, or commentary.
+"""
+
+let VISIT_SUMMARY_PROMPT = """
+You are a compassionate medical assistant. Read the following transcript of a patient's doctor visit and write a clear, \
+plain-language summary for the patient. Cover what was discussed, any diagnosis, medications or treatments prescribed, \
+and recommended next steps. Use simple, reassuring language the patient can easily understand, addressing them directly. \
+Return only the summary text, with no preamble or commentary.
+"""
+
 var APPOINTMENTS: [Appointment] = []
 
 func createPrevisitPrompt(profile: PatientProfile?) -> String {

@@ -98,9 +98,16 @@ class GrokVoiceAgent {
         task.resume()
         isConnected = true
         startReceiving(on: task)
+        // Apply the session instructions and wait for them to be sent *before*
+        // kicking off the first response, so the agent already knows it should
+        // begin the conversation (greet / read the summary) when it speaks.
         try await configureSession()
-        // Kick off the conversation so the agent greets the patient first.
-        send(["type": "response.create"])
+        await sendAndWait([
+            "type": "response.create",
+            "response": [
+                "instructions": "Begin the conversation now, following your system instructions."
+            ]
+        ])
     }
 
     private func configureSession() async throws {
@@ -116,15 +123,25 @@ class GrokVoiceAgent {
                 ]
             ]
         ]
-        send(config)
+        await sendAndWait(config)
     }
 
+    /// Fire-and-forget send, used for high-frequency events like audio frames
+    /// where ordering relative to other sends doesn't matter.
     private func send(_ payload: [String: Any]) {
         guard let data = try? JSONSerialization.data(withJSONObject: payload),
               let text = String(data: data, encoding: .utf8) else { return }
         Task { [weak self] in
             try? await self?.webSocketTask?.send(.string(text))
         }
+    }
+
+    /// Ordered send that completes once the frame is handed to the socket, so
+    /// callers can guarantee one control message is delivered before the next.
+    private func sendAndWait(_ payload: [String: Any]) async {
+        guard let data = try? JSONSerialization.data(withJSONObject: payload),
+              let text = String(data: data, encoding: .utf8) else { return }
+        try? await webSocketTask?.send(.string(text))
     }
 
     private func startReceiving(on task: URLSessionWebSocketTask) {

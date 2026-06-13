@@ -4,6 +4,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var newAppointment: Appointment? = nil
+    @State private var showUpcomingAppointments = false
     @State private var showPastAppointments = false
 
     var body: some View {
@@ -49,6 +50,16 @@ struct ContentView: View {
                         color: Color(red: 0.11, green: 0.49, blue: 0.78),
                         action: startNewAppointment
                     )
+
+                    AppointmentButton(
+                        title: "Upcoming Appointments",
+                        icon: "calendar",
+                        color: Color(red: 0.11, green: 0.49, blue: 0.78),
+                        action: { showUpcomingAppointments = true }
+                    )
+                    .navigationDestination(isPresented: $showUpcomingAppointments) {
+                        UpcomingAppointmentsView()
+                    }
 
                     AppointmentButton(
                         title: "Past Appointments",

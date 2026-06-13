@@ -1,11 +1,13 @@
 import SwiftUI
 import SwiftData
 
-struct PastAppointmentsView: View {
+/// Appointments that haven't been completed yet — i.e. they don't have a
+/// visit summary, so the patient is still preparing for or attending them.
+struct UpcomingAppointmentsView: View {
     @Query(sort: \Appointment.date, order: .reverse) private var allAppointments: [Appointment]
 
     private var appointments: [Appointment] {
-        allAppointments.filter { !$0.visit_summary.isEmpty }
+        allAppointments.filter { $0.visit_summary.isEmpty }
     }
 
     var body: some View {
@@ -29,7 +31,7 @@ struct PastAppointmentsView: View {
                 }
             }
         }
-        .navigationTitle("Past Appointments")
+        .navigationTitle("Upcoming Appointments")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

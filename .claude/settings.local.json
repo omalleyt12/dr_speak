@@ -18,7 +18,8 @@
       "Bash(xcodebuild -project DoctorSpeak.xcodeproj -scheme DoctorSpeak -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build)",
       "Read(//private/tmp/**)",
       "Bash(curl -sL \"https://docs.x.ai/developers/model-capabilities/audio/speech-to-text\" -o stt.html)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(xcodebuild -project DoctorSpeak.xcodeproj -scheme DoctorSpeak -destination 'generic/platform=iOS Simulator' build)"
     ]
   }
 }

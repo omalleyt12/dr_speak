@@ -4,13 +4,13 @@ import Foundation
 struct PrevisitResponse: Codable {
     let message: String
     let symptomSummary: String
-    let patientSummary: String
+    let patientHistory: String
     let appointmentTitle: String
 
     enum CodingKeys: String, CodingKey {
         case message
         case symptomSummary = "symptom_summary"
-        case patientSummary = "patient_summary"
+        case patientHistory = "patient_history"
         case appointmentTitle = "appointment_title"
     }
 }
@@ -41,12 +41,14 @@ class ChatMessage {
     var id: UUID
     var text: String
     var isUser: Bool
+    var isSummary: Bool
     var timestamp: Date
 
-    init(text: String, isUser: Bool) {
+    init(text: String, isUser: Bool, isSummary: Bool = false) {
         self.id = UUID()
         self.text = text
         self.isUser = isUser
+        self.isSummary = isSummary
         self.timestamp = .now
     }
 }

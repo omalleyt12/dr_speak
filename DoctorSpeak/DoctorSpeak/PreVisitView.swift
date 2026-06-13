@@ -3,6 +3,7 @@ import SwiftData
 
 struct PreVisitView: View {
     @Bindable var appointment: Appointment
+    @Query private var profiles: [PatientProfile]
     @State private var inputText = ""
     @State private var isLoading = false
     @FocusState private var inputFocused: Bool
@@ -52,6 +53,7 @@ struct PreVisitView: View {
                     .background(Color(red: 0.94, green: 0.97, blue: 1.0))
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .focused($inputFocused)
+                    .onSubmit(sendMessage)
 
                 Button(action: sendMessage) {
                     Image(systemName: "arrow.up.circle.fill")
@@ -88,12 +90,19 @@ struct PreVisitView: View {
 
         Task {
             do {
-                let raw = try await GrokService.chat(messages: snapshot, prompt: createPrevisitPrompt())
+                let raw = try await GrokService.chat(messages: snapshot, prompt: createPrevisitPrompt(profile: profiles.first))
                 let data = Data(raw.utf8)
                 let parsed = try JSONDecoder().decode(PrevisitResponse.self, from: data)
                 appointment.previsit_messages.append(ChatMessage(text: parsed.message, isUser: false))
                 if !parsed.appointmentTitle.isEmpty {
                     appointment.appointment_title = parsed.appointmentTitle
+                }
+                if !parsed.patientHistory.isEmpty, let profile = profiles.first {
+                    profile.history = parsed.patientHistory
+                }
+                if !parsed.symptomSummary.isEmpty {
+                    appointment.previsit_summary = parsed.symptomSummary
+                    appointment.previsit_messages.append(ChatMessage(text: parsed.symptomSummary, isUser: false, isSummary: true))
                 }
             } catch {
                 appointment.previsit_messages.append(ChatMessage(text: "Sorry, I couldn't connect. Please try again.", isUser: false))
@@ -143,25 +152,39 @@ struct MessageBubble: View {
     let message: ChatMessage
 
     var body: some View {
-        HStack {
-            if message.isUser { Spacer(minLength: 48) }
-
-            Text(message.text)
-                .font(.system(size: 16))
-                .foregroundStyle(message.isUser ? .white : Color(red: 0.1, green: 0.15, blue: 0.2))
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(
-                    message.isUser
-                        ? Color(red: 0.11, green: 0.49, blue: 0.78)
-                        : .white
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 18))
-                .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
-
-            if !message.isUser { Spacer(minLength: 48) }
+        if message.isSummary {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Here is what to tell your doctor:")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(Color(red: 0.11, green: 0.49, blue: 0.78))
+                Text(message.text)
+                    .font(.system(size: 17))
+                    .foregroundStyle(Color(red: 0.1, green: 0.15, blue: 0.2))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(red: 0.88, green: 0.95, blue: 1.0))
+            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color(red: 0.11, green: 0.49, blue: 0.78).opacity(0.3), lineWidth: 1))
+            .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
+            .padding(.horizontal, 24)
+            .id(message.id)
+        } else {
+            HStack {
+                if message.isUser { Spacer(minLength: 48) }
+                Text(message.text)
+                    .font(.system(size: 16))
+                    .foregroundStyle(message.isUser ? .white : Color(red: 0.1, green: 0.15, blue: 0.2))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(message.isUser ? Color(red: 0.11, green: 0.49, blue: 0.78) : .white)
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                    .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
+                if !message.isUser { Spacer(minLength: 48) }
+            }
+            .id(message.id)
         }
-        .id(message.id)
     }
 }
 

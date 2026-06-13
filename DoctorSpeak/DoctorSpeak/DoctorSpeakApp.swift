@@ -5,15 +5,20 @@ import SwiftData
 struct DoctorSpeakApp: App {
     let container: ModelContainer = {
         do {
-            let c = try ModelContainer(for: Appointment.self)
+            let c = try ModelContainer(for: Appointment.self, PatientProfile.self)
             let context = ModelContext(c)
             APPOINTMENTS = (try? context.fetch(FetchDescriptor<Appointment>())) ?? []
+            let profiles = (try? context.fetch(FetchDescriptor<PatientProfile>())) ?? []
+            if profiles.isEmpty {
+                context.insert(PatientProfile())
+            }
             return c
         } catch {
-            // Schema changed — wipe the old store and start fresh
             let url = URL.applicationSupportDirectory.appending(path: "default.store")
             try? FileManager.default.removeItem(at: url)
-            let c = try! ModelContainer(for: Appointment.self)
+            let c = try! ModelContainer(for: Appointment.self, PatientProfile.self)
+            let context = ModelContext(c)
+            context.insert(PatientProfile())
             return c
         }
     }()

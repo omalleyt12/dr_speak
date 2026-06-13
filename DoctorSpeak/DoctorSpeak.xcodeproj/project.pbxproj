@@ -20,6 +20,12 @@
 		B001000100000011 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000012 /* Secrets.swift */; };
 		B001000100000012 /* Secrets.example.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000013 /* Secrets.example.swift */; };
 		B001000100000013 /* PatientProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000014 /* PatientProfile.swift */; };
+		B001000100000014 /* VisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000015 /* VisitView.swift */; };
+		B001000100000015 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000016 /* AudioRecorder.swift */; };
+		B001000100000016 /* PostVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000017 /* PostVisitView.swift */; };
+		B001000100000017 /* GrokVoiceAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000018 /* GrokVoiceAgent.swift */; };
+		B001000100000018 /* VoicePreVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001000200000019 /* VoicePreVisitView.swift */; };
+		B00100010000001A /* VoicePostVisitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00100020000001A /* VoicePostVisitView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +43,12 @@
 		B001000200000012 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		B001000200000013 /* Secrets.example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.example.swift; sourceTree = "<group>"; };
 		B001000200000014 /* PatientProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientProfile.swift; sourceTree = "<group>"; };
+		B001000200000015 /* VisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitView.swift; sourceTree = "<group>"; };
+		B001000200000016 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		B001000200000017 /* PostVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVisitView.swift; sourceTree = "<group>"; };
+		B001000200000018 /* GrokVoiceAgent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrokVoiceAgent.swift; sourceTree = "<group>"; };
+		B001000200000019 /* VoicePreVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreVisitView.swift; sourceTree = "<group>"; };
+		B00100020000001A /* VoicePostVisitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePostVisitView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +76,12 @@
 				B001000200000012 /* Secrets.swift */,
 				B001000200000013 /* Secrets.example.swift */,
 				B001000200000014 /* PatientProfile.swift */,
+				B001000200000015 /* VisitView.swift */,
+				B001000200000016 /* AudioRecorder.swift */,
+				B001000200000017 /* PostVisitView.swift */,
+				B001000200000018 /* GrokVoiceAgent.swift */,
+				B001000200000019 /* VoicePreVisitView.swift */,
+				B00100020000001A /* VoicePostVisitView.swift */,
 				B001000200000003 /* Assets.xcassets */,
 				B001000400000003 /* Preview Content */,
 			);
@@ -175,6 +193,12 @@
 				B001000100000011 /* Secrets.swift in Sources */,
 				B001000100000012 /* Secrets.example.swift in Sources */,
 				B001000100000013 /* PatientProfile.swift in Sources */,
+				B001000100000014 /* VisitView.swift in Sources */,
+				B001000100000015 /* AudioRecorder.swift in Sources */,
+				B001000100000016 /* PostVisitView.swift in Sources */,
+				B001000100000017 /* GrokVoiceAgent.swift in Sources */,
+				B001000100000018 /* VoicePreVisitView.swift in Sources */,
+				B00100010000001A /* VoicePostVisitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +337,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Doctor Speak needs microphone access to record your visit.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -343,6 +368,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Doctor Speak needs microphone access to record your visit.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

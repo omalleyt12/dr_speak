@@ -6,13 +6,13 @@ struct AppointmentDetailView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            NavigationLink(destination: PreVisitView(appointment: appointment)) {
+            NavigationLink(destination: VoicePreVisitView(appointment: appointment)) {
                 AppointmentPhaseButton(title: "Pre-visit", icon: "list.clipboard.fill", color: Color(red: 0.11, green: 0.49, blue: 0.78))
             }
-            NavigationLink(destination: Text("Visit — coming soon").navigationTitle("Visit")) {
+            NavigationLink(destination: VisitView(appointment: appointment)) {
                 AppointmentPhaseButton(title: "Visit", icon: "stethoscope", color: Color(red: 0.05, green: 0.67, blue: 0.72))
             }
-            NavigationLink(destination: Text("Post-visit — coming soon").navigationTitle("Post-visit")) {
+            NavigationLink(destination: PostVisitView(appointment: appointment)) {
                 AppointmentPhaseButton(title: "Post-visit", icon: "checkmark.circle.fill", color: Color(red: 0.2, green: 0.6, blue: 0.4))
             }
             Spacer()

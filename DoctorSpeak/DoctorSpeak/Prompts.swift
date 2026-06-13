@@ -6,10 +6,49 @@ Always respond with a JSON object in this exact format:
 
 When you think you have collected enough information about the patient and their symptoms, populate the "symptom_summary" field. This field should use 
 """
-let POSTVISIT_PROMPT = "How did your appointment go?"
+let POSTVISIT_PROMPT = """
+You are a compassionate medical assistant helping a patient understand what happened during their doctor's appointment. \
+You have access to the transcript of the visit (supplied below). \
+If there are no prior messages in the conversation, begin your reply by giving the patient a clear, plain-language summary of what happened during the visit — the diagnosis, any medications or treatments prescribed, and recommended next steps — then warmly ask whether they have any questions or concerns. \
+For every following message, answer the patient's questions and concerns using the visit transcript and general medical knowledge. \
+If something was not covered during the visit, say so plainly and suggest they follow up with their doctor. \
+Always respond with a JSON object in this exact format:
+{"message": "<your conversational reply to the patient>"}
+"""
+let PREVISIT_VOICE_PROMPT = """
+You are a compassionate medical intake assistant talking with a patient by voice to help them prepare for a doctor's appointment. \
+Speak naturally and conversationally, as if on a phone call. Keep each turn short — ask one focused follow-up question at a time to understand the patient's symptoms and concerns. \
+Begin the conversation by warmly asking what type of doctor they are seeing. \
+When you have gathered enough detail about their symptoms, briefly summarize aloud what they should tell their doctor, and then ask them if they have any more questions or concerns.
+"""
+let POSTVISIT_VOICE_PROMPT = """
+You are a compassionate medical assistant talking with a patient by voice to help them understand what happened during their doctor's appointment. \
+Speak naturally and conversationally, as if on a phone call. Keep each turn short. \
+Begin the conversation by reading the patient a clear, plain-language summary of their visit (supplied below), then warmly ask whether they have any questions or concerns. \
+For every following message, answer the patient's questions and concerns using the visit summary and general medical knowledge. \
+If something was not covered during the visit, say so plainly and suggest they follow up with their doctor.
+"""
+
 var APPOINTMENTS: [Appointment] = []
 
 func createPrevisitPrompt(profile: PatientProfile?) -> String {
     let history = profile?.history.isEmpty == false ? profile!.history : "N/A"
     return "\(PREVISIT_PROMPT)\n\nPatient history: \(history)"
+}
+
+func createPrevisitVoicePrompt(profile: PatientProfile?) -> String {
+    let history = profile?.history.isEmpty == false ? profile!.history : "N/A"
+    return "\(PREVISIT_VOICE_PROMPT)\n\nPatient history (for your reference, do not read aloud): \(history)"
+}
+
+func createPostvisitPrompt(transcript: String, profile: PatientProfile?) -> String {
+    let history = profile?.history.isEmpty == false ? profile!.history : "N/A"
+    let visit = transcript.isEmpty ? "N/A" : transcript
+    return "\(POSTVISIT_PROMPT)\n\nPatient history: \(history)\n\nVisit transcript:\n\(visit)"
+}
+
+func createPostvisitVoicePrompt(summary: String, profile: PatientProfile?) -> String {
+    let history = profile?.history.isEmpty == false ? profile!.history : "N/A"
+    let visit = summary.isEmpty ? "N/A" : summary
+    return "\(POSTVISIT_VOICE_PROMPT)\n\nPatient history (for your reference, do not read aloud): \(history)\n\nVisit summary:\n\(visit)"
 }

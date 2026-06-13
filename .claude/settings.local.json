@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.x.ai)",
+      "WebFetch(domain:x.ai)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:console.x.ai)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(curl -s \"https://docs.x.ai/developers/model-capabilities/audio/speech-to-text\")",
+      "Bash(curl -s \"https://docs.x.ai/developers/model-capabilities/audio/speech-to-text\" -H \"Accept: text/plain\")",
+      "Bash(sed -n '/diarize/,/^$/p' /Users/thomasomalley/.claude/projects/-Users-thomasomalley-dr-speak/92521e07-d628-4665-8b24-f032c94c4c1f/tool-results/bj2q9tke9.txt | head -100)",
+      "Bash(python3)",
+      "Bash(echo \"=== AppIcon.appiconset ===\"; ls -la \"/Users/thomasomalley/dr_speak/DoctorSpeak/DoctorSpeak/Assets.xcassets/AppIcon.appiconset/\"; echo \"=== Assets.xcassets ===\"; ls -la \"/Users/thomasomalley/dr_speak/DoctorSpeak/DoctorSpeak/Assets.xcassets/\"; echo \"=== recent images in common dirs ===\"; ls -lat ~/Downloads ~/Desktop /tmp 2>/dev/null | grep -iE '\\\\.\\(png|jpg|jpeg\\)' | head -20)",
+      "Bash(echo \"=== tool-results dir ===\"; ls -lat \"/Users/thomasomalley/.claude/projects/-Users-thomasomalley-dr-speak/92521e07-d628-4665-8b24-f032c94c4c1f/tool-results/\" 2>/dev/null | head; echo \"=== recent files anywhere under .claude project ===\"; find \"/Users/thomasomalley/.claude/projects/-Users-thomasomalley-dr-speak/\" -type f \\\\\\( -name \"*.png\" -o -name \"*.jpg\" -o -name \"*.jpeg\" \\\\\\) -newermt \"2026-06-13 13:00\" 2>/dev/null | head; echo \"=== clipboard/var folders recent images ===\"; find /var/folders /private/var/folders -name \"*.png\" -newermt \"2026-06-13 13:40\" 2>/dev/null | head)",
+      "Bash(sips -g pixelWidth -g pixelHeight dr_speak.jpeg)",
+      "Bash(sips -g pixelWidth -g pixelHeight -g hasAlpha AppIcon.appiconset/AppIcon.png)",
+      "WebSearch",
+      "Bash(xcodebuild -project DoctorSpeak.xcodeproj -scheme DoctorSpeak -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -sL \"https://docs.x.ai/developers/model-capabilities/audio/speech-to-text\" -o stt.html)",
+      "Bash(python3 -)"
+    ]
+  }
+}

@@ -15,9 +15,12 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 8) {
-                    Image(systemName: "stethoscope.circle.fill")
-                        .font(.system(size: 72))
-                        .foregroundStyle(.white)
+                    Image("DoctorSpeakLogo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 110, height: 110)
+                        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                        .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                         .padding(.top, 48)
 
                     Text("Doctor Speak")
@@ -63,7 +66,7 @@ struct ContentView: View {
             }
         }
             .navigationDestination(item: $newAppointment) { appt in
-                PreVisitView(appointment: appt)
+                VoicePreVisitView(appointment: appt)
             }
         } // NavigationStack
     }
